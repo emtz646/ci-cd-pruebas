@@ -41,5 +41,5 @@ jobs:
       id-token: write
 
   steps:
-    - name: Deploy a GitHub Pages
-      uses: actions/deploy-pages@v4
+  - name: Deploy a GitHub Pages
+    uses: actions/deploy-pages@v4
