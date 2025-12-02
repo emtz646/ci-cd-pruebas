@@ -34,8 +34,8 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3def saludo(nombre): return f"Hola {nombre}"
-
+      uses: actions/checkout@v3def
+      
     - name: Crear página según resultado
       run: |
         if [[ "${{ needs.test.outputs.tests_result }}" == "success" ]]; then
