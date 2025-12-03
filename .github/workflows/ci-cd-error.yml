@@ -5,14 +5,14 @@ on:
     branches: ["main"]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     outputs:
       tests_result: ${{ steps.test_outcome.outcome }}
 
     steps:
-    - name: Checkout del repositorio
+    - name: Checkout
       uses: actions/checkout@v3
 
     - name: Instalar dependencias
