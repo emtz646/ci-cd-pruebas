@@ -7,21 +7,19 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     outputs:
       tests_result: ${{ steps.test_outcome.outcome }}
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4 # Actualizado a v4
 
-    - name: Instalar dependencias
-      run: pip install -r requirements.txt
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
 
-    - name: Ejecutar pruebas
-      id: test_outcome
-      run: pytest
-      continue-on-error: true
+      - name: Ejecutar pruebas
+        id: test_outcome
+        run: pytest
+        continue-on-error: true
 
   deploy:
     needs: test
@@ -29,13 +27,29 @@ jobs:
     permissions:
       pages: write
       id-token: write
-
-    if: ${{ always() }}
+    if: ${{ always() }} # Se ejecuta aunque fallen las pruebas
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3def
+      - name: Checkout
+        uses: actions/checkout@v4 # ERROR 1 CORREGIDO: Decía @v3def
       
+      - name: Crear página según resultado
+        run: |
+          if [[ "${{ needs.test.outputs.tests_result }}" == "success" ]]; then
+              echo "<h1>Despliegue exitoso </h1>" > index.html
+              echo "<p>Las pruebas pasaron correctamente.</p>" >> index.html
+          else
+              echo "<h1 style='color:red;'> Error en CI</h1>" > index.html
+              echo "<p>Favor de revisar las pruebas en GitHub Actions.</p>" >> index.html
+          fi
+      
+      - name: Subir a GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: . # ERROR 2 CORREGIDO: Indentación arreglada
+      
+      - name: Deploy # ERROR 3 CORREGIDO: Indentación alineada
+        uses: actions/deploy-pages@v4      
     - name: Crear página según resultado
       run: |
         if [[ "${{ needs.test.outputs.tests_result }}" == "success" ]]; then
