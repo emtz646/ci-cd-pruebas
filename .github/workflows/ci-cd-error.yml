@@ -5,6 +5,7 @@ on:
     branches: ["main"]
 
 jobs:
+
   test:
     runs-on: ubuntu-latest
     outputs:
@@ -27,11 +28,12 @@ jobs:
     permissions:
       pages: write
       id-token: write
-    if: ${{ always() }} # Se ejecuta aunque fallen las pruebas
+
+    if: ${{ always() }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4 # ERROR 1 CORREGIDO: Decía @v3def
+        uses: actions/checkout@v4
       
       - name: Crear página según resultado
         run: |
@@ -46,24 +48,7 @@ jobs:
       - name: Subir a GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: . # ERROR 2 CORREGIDO: Indentación arreglada
+          path: .
       
-      - name: Deploy # ERROR 3 CORREGIDO: Indentación alineada
-        uses: actions/deploy-pages@v4      
-    - name: Crear página según resultado
-      run: |
-        if [[ "${{ needs.test.outputs.tests_result }}" == "success" ]]; then
-            echo "<h1>Despliegue exitoso </h1>" > index.html
-            echo "<p>Las pruebas pasaron correctamente.</p>" >> index.html
-        else
-            echo "<h1 style='color:red;'> Error en CI</h1>" > index.html
-            echo "<p>Favor de revisar las pruebas en GitHub Actions.</p>" >> index.html
-        fi
-        
-    - name: Subir a GitHub Pages
-      uses: actions/upload-pages-artifact@v3
-      with:
-      path: .
-      
-   - name: Deploy
-     uses: actions/deploy-pages@v4
+      - name: Deploy
+        uses: actions/deploy-pages@v4
